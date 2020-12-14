@@ -12,7 +12,8 @@
 
 .NOTES
     -Date 2020-12-14 - Author Johan Bijnens @ALZDBA
-
+    - DO NOT RUN THIS IN PRODUCTION UNLESS YOU HAVE TESTED IT AND UNDERSTAND WHAT IS DOES, HOW AND WHY
+    
 .LINK
     https://sqlbenjamin.wordpress.com/2018/08/07/creating-registered-servers-in-ssms-via-powershell/
 
