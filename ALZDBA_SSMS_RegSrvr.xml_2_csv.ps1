@@ -1,13 +1,42 @@
 ﻿<#
-Extract data from RegSrvr.xml to generate CSV files for upload to SSMS Registered servers using "SSMS - CreateSqlServerRegistrationsInSSMS.ps1" 
+.SYNOPSIS
+    Extract data from RegSrvr.xml to generate CSV files for upload to SSMS Registered servers using "SSMS - CreateSqlServerRegistrationsInSSMS.ps1" 
 
-https://sqlbenjamin.wordpress.com/2018/08/07/creating-registered-servers-in-ssms-via-powershell/
+.DESCRIPTION
+    Extract data from RegSrvr.xml to generate CSV files for upload to SSMS Registered servers using "SSMS - CreateSqlServerRegistrationsInSSMS.ps1" 
+    If your profile got messed up, and you haven't been able to export your SSMS registered servers, but still have the RegSrvr.xml available, you can recover your registrations using this workaround.
+    This is a quick and dirty solution ( as we only use ADAuthentication for DBAs ) to process "C:\Users\<yourAccount>\AppData\Roaming\Microsoft\SQL Server Management Studio\RegSrvr.xml"
 
-If your profile got messed up, and you haven't been able to export your SSMS registered servers, but still have the RegSrvr.xml available, you can recover your registrations using this workaround.
+.PARAMETER  <Parameter-Name>
+    If bound parameters, no need to put them overhere
 
-This is a quick and dirty solution ( as we only use ADAuthentication for DBAs ) to process "C:\Users\<yourAccount>\AppData\Roaming\Microsoft\SQL Server Management Studio\RegSrvr.xml"
+.NOTES
+    -Date 2020-12-14 - Author Johan Bijnens @ALZDBA
+
+.LINK
+    https://sqlbenjamin.wordpress.com/2018/08/07/creating-registered-servers-in-ssms-via-powershell/
 
 #>
+
+$VerbosePreference = [system.Management.Automation.ActionPreference]::Continue 
+$VerbosePreference = [system.Management.Automation.ActionPreference]::SilentlyContinue
+
+Trap {
+    # Handle the error
+    $err = $_.Exception
+    #Want to save tons of time debugging a #Powershell script? Put this in your catch blocks: 
+    $ErrorLineNumber = $_.InvocationInfo.ScriptLineNumber
+    write-warning $('Trapped error at line [{0}] : [{1}]' -f  $ErrorLineNumber,  $err.Message );
+
+    write-Error $err.Message
+    while( $err.InnerException ) {
+	    $err = $err.InnerException
+	    write-Error $err.Message
+	    };
+    # End the script.
+    break
+    }
+
 set-location C:\SSMS_Regsrvr
 Clear-Host
 
